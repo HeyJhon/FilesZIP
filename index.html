@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>Lista de tareas</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+  <div id="app">
+    <h1>Mi lista de tareas</h1>
+    <div class="input-group mb-3">
+      <input type="text" v-model="task" @keyup.enter="addTask" class="form-control" placeholder="A&ntilde;adir tarea" aria-label="Añadir tarea" aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button @click="addTask" class="btn btn-outline-secondary" type="button">A&ntilde;adir</button>
+      </div>
+    </div>
+    <ul class="list-group">
+      <li v-for="task in tasks" :class="{'list-group-item-success': !task.done, 'list-group-item-danger': task.done}" @click="task.done = !task.done">
+        {{ task.name }}
+      </li>
+    </ul>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: {
+        task: '',
+        tasks: JSON.parse(localStorage.getItem('tasks')) || []
+      },
+      methods: {
+        addTask() {
+          this.tasks.push({ name: this.task, done: false });
+          this.task = '';
+        }
+      },
+      watch: {
+        tasks(tasks) {
+          localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+      }
+    });
+  </script>
+</body>
+</html>
